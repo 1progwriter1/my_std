@@ -36,6 +36,7 @@ public:
     template<typename Callable>
     function(Callable callable);
 
+    function();
     function(const function& other);
     function(function&& other);
 
@@ -65,6 +66,10 @@ function<R(Types ...)>::function(const function& other)
 template<typename R, typename ... Types>
 function<R(Types ...)>::function(function&& other)
     :   func_(std::move(other.func_)) {}
+
+template<typename R, typename ... Types>
+function<R(Types ...)>::function()
+    :   func_(nullptr) {}
 
 template<typename R, typename ... Types>
 function<R(Types ...)>& function<R(Types ...)>::operator=(const function& other)
