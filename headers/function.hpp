@@ -2,6 +2,7 @@
 #define MY_STD_FUNCTION_H
 
 #include <iostream>
+#include "forward.hpp"
 
 namespace my_std
 {
@@ -23,7 +24,7 @@ class CallableObjectImpl : public CallableObject<R, Types ...>
 {
 public:
     CallableObjectImpl(Callable callable) : func_(callable) {}
-    R call(Types ... args) override { return func_(std::forward<Types>(args)...); }
+    R call(Types ... args) override { return func_(my_std::forward<Types>(args)...); }
     std::unique_ptr<CallableObject<R, Types ...>> copy() const override { return std::make_unique<CallableObjectImpl<Callable, R, Types ...>>(func_); }
 private:
     Callable func_;
@@ -37,14 +38,14 @@ public:
     function(Callable callable);
 
     function();
-    function(const function& other);
-    function(function&& other);
+    function(const function &other);
+    function(function &&other);
 
-    function& operator=(const function& other);
-    function& operator=(function&& other);
-    function& operator=(std::nullptr_t);
+    function &operator=(const function &other);
+    function &operator=(function &&other);
+    function &operator=(std::nullptr_t);
 
-    void swap(function& other);
+    void swap(function &other);
 
     explicit operator bool() const;
 
@@ -60,11 +61,11 @@ function<R(Types ...)>::function(Callable callable)
     :   func_(std::make_unique<CallableObjectImpl<Callable, R, Types ...>>(callable)) {}
 
 template<typename R, typename ... Types>
-function<R(Types ...)>::function(const function& other)
+function<R(Types ...)>::function(const function &other)
     :   func_(std::move(other.func_->copy())) {}
 
 template<typename R, typename ... Types>
-function<R(Types ...)>::function(function&& other)
+function<R(Types ...)>::function(function &&other)
     :   func_(std::move(other.func_)) {}
 
 template<typename R, typename ... Types>
@@ -72,28 +73,28 @@ function<R(Types ...)>::function()
     :   func_(nullptr) {}
 
 template<typename R, typename ... Types>
-function<R(Types ...)>& function<R(Types ...)>::operator=(const function& other)
+function<R(Types ...)> &function<R(Types ...)>::operator=(const function &other)
 {
     func_ = std::move(other.func_->copy());
     return *this;
 }
 
 template<typename R, typename ... Types>
-function<R(Types ...)>& function<R(Types ...)>::operator=(function&& other)
+function<R(Types ...)> &function<R(Types ...)>::operator=(function &&other)
 {
     func_ = std::move(other.func_);
     return *this;
 }
 
 template<typename R, typename ... Types>
-function<R(Types ...)>& function<R(Types ...)>::operator=(std::nullptr_t)
+function<R(Types ...)> &function<R(Types ...)>::operator=(std::nullptr_t)
 {
     func_ = nullptr;
     return *this;
 }
 
 template<typename R, typename ... Types>
-void function<R(Types ...)>::swap(function& other)
+void function<R(Types ...)>::swap(function &other)
 {
     std::swap(func_, other.func_);
 }
