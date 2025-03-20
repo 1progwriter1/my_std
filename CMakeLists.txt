@@ -5,7 +5,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(TARGET run)
 
-project(Function)
+project(MY_STD)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
 

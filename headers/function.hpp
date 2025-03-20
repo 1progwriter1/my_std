@@ -1,8 +1,10 @@
 #ifndef MY_STD_FUNCTION_H
 #define MY_STD_FUNCTION_H
 
-#include <iostream>
 #include "forward.hpp"
+
+#include <memory>
+#include <stdexcept>
 
 namespace my_std
 {
